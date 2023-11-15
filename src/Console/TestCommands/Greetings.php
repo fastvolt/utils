@@ -17,7 +17,7 @@ class Greetings extends Command
         $this->setName('Greetings')->setDescription('Just a Description Test');
         $this->addArgument('name', InputArgument::REQUIRED, 'Input Your Name Here:');
         $this->setHelp('Names to Print');
-        $this->
+        $this->addOption('Options');
     }
 
 

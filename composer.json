@@ -14,5 +14,7 @@
             "email": "oladoyinboadverts@gmail.com"
         }
     ],
-    "require": {}
+    "require": {
+        "symfony/console": "^6.3"
+    }
 }

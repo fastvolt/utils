@@ -1,0 +1,18 @@
+{
+    "name": "fastvolt/utils",
+    "description": "Available Useful Helper Files For FastVolt Framework",
+    "type": "library",
+    "license": "MIT License",
+    "autoload": {
+        "psr-4": {
+            "FastVolt\\Utils\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Oladoyinbo Vincent",
+            "email": "oladoyinboadverts@gmail.com"
+        }
+    ],
+    "require": {}
+}

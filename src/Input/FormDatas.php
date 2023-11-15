@@ -7,8 +7,7 @@ namespace FastVolt\Utils\Input;
 
 class FormDatas
 {
-
-    public function __construct(
+    protected function __construct(
 
         /** @var array<array, string> */
         private array $files,
@@ -21,7 +20,33 @@ class FormDatas
     }
 
 
-    public function get(string|array|null $name = null, bool $sanitize)
+    protected function hasInput(string|array $names): bool
+    {
+        if (is_object($this->getFormDataArray(true))) {
+
+            if (is_string($names)) {
+
+                return array_key_exists($names, (array) $this->getFormDataArray(true));
+
+            } elseif (is_array($names)) {
+
+                foreach ($names as $single) {
+                    if (array_key_exists($single, (array) $this->getFormDataArray(true))) {
+                        continue;
+                    } else {
+                        return false;
+                    }
+                }
+
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+
+    protected function getInput(string|array|null $name = null, bool $sanitize)
     {
         return !is_null($name)
             ? self::getSpecificFormData($name, $sanitize)
@@ -43,7 +68,7 @@ class FormDatas
      *
      * @return  object|null
      */
-    private function getSpecificFormData(string|array $names, bool $action = true): object|null
+    private function getSpecificFormData(string|array $names, bool $action = true): string|array|null
     {
         if (is_object($this->getFormDataArray($action))) {
 
@@ -51,27 +76,30 @@ class FormDatas
             $object = new \stdClass;
             # convert string values to array
             $names = is_string($names) ? [$names] : $names;
-            # where to store filtered datas
-            $filtered_datas = [];
+            
             # get all post and files and convert to array
             $all_post_datas = (array) $this->getFormDataArray($action);
 
-            foreach ($names as $filter_val) {
-                # check if filtered names exist in all post datas
-                if (array_key_exists($filter_val, $all_post_datas)) {
-                    # store filter name value in all post datas in filtered lists
-                    $filtered_datas[$filter_val] = $all_post_datas[$filter_val];
-                } else {
-                    return throw new \InvalidArgumentException('(' . $filter_val . ') Input Data Does Not Exist in Request Header');
+            if (! $this->hasInput($names)) {
+                return throw new \InvalidArgumentException('Input Data Does Not Exist in Request Header');  
+            }
+
+            print_r($all_post_datas[$names]);
+
+            if (is_string($names)) {
+
+                $result = $this->getFormDataArray($action)->$names;
+
+            } elseif (is_array($names)) {
+                # where to store filtered datas
+                $result = [];
+
+                foreach ($names as $single) {
+                    $result[$single] = $all_post_datas[$single]; 
                 }
             }
 
-            # convert filtered list datas array to object
-            foreach ($filtered_datas as $key => $val) {
-                $object->$key = $val;
-            }
-
-            return (object) $object;
+            return $result;
         }
 
         return null;
@@ -82,8 +110,6 @@ class FormDatas
     /**
      * Retrieve Request POST Data Array
      *
-     * @param array $param An array of strings representing the names of the POST parameters to
-     * retrieve data from.
      * @param bool  $action: A boolean value that determines whether or not to apply htmlspecialchars()
      * function to the retrieved data. If it is set to true, the function will apply htmlspecialchars() to
      * the retrieved data, otherwise it will return the data as it is.
@@ -98,15 +124,16 @@ class FormDatas
 
         # map request array files to post items data arrray if file exist
         if (isset($this->files)) {
+
             foreach ($this->files as $key => $value) {
-                $all_datas[$key] = request_files($key);
+                $all_datas[$key] = $value;
             }
         }
 
         # loop through post datas and sanitize data if the option is enabled
         foreach ($this->post as $key => $value) {
             $all_datas[$key] = match ($action) {
-                true => escape($value),
+                true => \FastVolt\Utils\Esc::out($value),
                 false => $value
             };
         }
@@ -118,6 +145,7 @@ class FormDatas
 
         return (object) $object;
     }
+
 
 
 

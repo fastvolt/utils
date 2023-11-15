@@ -20,16 +20,16 @@ class Sanitize
         $input = is_object($this->input) ? (array)$this->input : $this->input;
 
         // integers operation
-        if (is_int($input) && $strip_tags = false) {
+        if (is_int($input) && $this->strip_tags == false) {
             return filter_var($input, FILTER_SANITIZE_NUMBER_INT);
         }
 
         // string operations
-        if (is_string($input) && $strip_tags = false) {
+        if (is_string($input) && $this->strip_tags == false) {
             return htmlspecialchars($input, ENT_QUOTES, 'UTF-8');
         }
 
-        if (is_string($input) && $strip_tags = true) {
+        if (is_string($input) && $this->strip_tags == true) {
             return htmlspecialchars(strip_tags($input), ENT_QUOTES, 'UTF-8');
         }
 
@@ -66,12 +66,12 @@ class Sanitize
             }
 
             // string operations
-            if (is_string($input) && $strip_tags = false) {
+            if (is_string($input) && $this->strip_tags = false) {
                 $all_inputs[] = htmlspecialchars($input, ENT_QUOTES, 'UTF-8');
                 continue;
             }
 
-            if (is_string($input) && $strip_tags = true) {
+            if (is_string($input) && $this->strip_tags = true) {
                 $all_inputs[] = htmlspecialchars(strip_tags($input), ENT_QUOTES, 'UTF-8');
                 continue;
             }

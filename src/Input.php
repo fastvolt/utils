@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace FastVolt\Utils;
 
-class Input
+class Input extends Input\FormDatas
 {
     /**
      * Retrive Form Input Data
@@ -23,13 +23,19 @@ class Input
      *
      * @return object|null
      */
-    public function get(
+    public static function get(
         string|null $names = null,
         bool $sanitize = true,
         array $filter = []
-    ): object|null {
+    ): string|array|object|null {
 
-        return (new \FastVolt\Utils\Input\FormDatas($_FILES, $_POST)) -> get($names, $sanitize);
+        return (new parent($_FILES, $_POST)) -> getInput($names, $sanitize);
+    }
+
+
+    public static function has(string|array $names): bool
+    {
+        return (new parent($_FILES, $_POST)) -> hasInput($names);
     }
 
 }

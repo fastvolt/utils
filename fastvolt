@@ -1,0 +1,14 @@
+#!/usr/bin/env php
+<?php
+// application.php
+
+require __DIR__.'/vendor/autoload.php';
+
+use Symfony\Component\Console\Application;
+use FastVolt\Utils\Console\TestCommands\Greetings;
+
+$application = new Application( 'FastVolt Terminal', 'V1.2' );
+
+$application->add(new Greetings());
+
+$application->run();

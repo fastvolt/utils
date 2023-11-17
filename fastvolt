@@ -4,11 +4,14 @@
 
 require __DIR__.'/vendor/autoload.php';
 
-use Symfony\Component\Console\Application;
+use FastVolt\Utils\Console\Terminal;
 use FastVolt\Utils\Console\TestCommands\Greetings;
 
-$application = new Application( 'FastVolt Terminal', 'V1.2' );
+$all_commands = [
 
-$application->add(new Greetings());
+    'FastVolt\\Utils\\Console\\TestCommands\\Greetings'
+];
 
-$application->run();
+$terminal = Terminal::new('FastVolt Terminal', 1.2) 
+-> commands($all_commands)
+-> save_deploy();

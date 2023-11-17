@@ -16,7 +16,7 @@ class Greetings extends Command
 
     public function configure()
     {
-        $this->setName('fs')->setDescription('Just a Description Test');
+        $this->setName('fs') ->setDescription('Just a Description Test');
         $this->addArgument('name', InputArgument::REQUIRED, 'Input Your Name Here:');
         $this->setHelp('Names to Print');
         $this->addOption('tag', 't', InputOption::VALUE_REQUIRED, 'List Out Tags you are willing to use, separated by comma');

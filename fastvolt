@@ -9,7 +9,7 @@ use FastVolt\Utils\Console\TestCommands\Greetings;
 
 $all_commands = [
 
-    'FastVolt\\Utils\\Console\\TestCommands\\Greetings'
+    'FastVolt\\Utils\\Console\\TestCommands\\DefaultCommand'
 ];
 
 $terminal = Terminal::new('FastVolt Terminal', 1.2) 

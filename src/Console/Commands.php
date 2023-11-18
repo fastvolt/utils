@@ -18,7 +18,7 @@ use FastVolt\Utils\Console\Exceptions\{
     CommandOutputMethodNotFoundException
 };
 
-class Commands
+class Commands extends Command
 {
 
     public function __construct(
@@ -69,14 +69,14 @@ class Commands
             return throw new \InvalidArgumentException(sprintf('(%s) Object Not Valid', $command));
         }
 
-        # check if input method exist
-        if (!method_exists($command_obj, 'input')) {
-            return throw new CommandInputMethodNotFoundException(sprintf('Input Method Does Not Exist In (%s) Command Object', $command));
+        # check if config method exist
+        if (!method_exists($command_obj, 'config')) {
+            return throw new CommandInputMethodNotFoundException(sprintf('Config Method Does Not Exist In (%s) Command Object', $command));
         }
 
-        # check if output method exist
-        if (!method_exists($command_obj, 'output')) {
-            return throw new CommandOutputMethodNotFoundException(sprintf('Input Method Does Not Exist In (%s) Command Object', $command));
+        # check if execute method exist
+        if (!method_exists($command_obj, 'exec')) {
+            return throw new CommandOutputMethodNotFoundException(sprintf('Exec Method Does Not Exist In (%s) Command Object', $command));
         }
 
         return $command_obj;
@@ -89,14 +89,14 @@ class Commands
 
         $obj_name = $reflect->getName();
 
-        # check if input method exist
-        if (!method_exists($command, 'input')) {
-            return throw new CommandInputMethodNotFoundException(sprintf('Input Method Does Not Exist In (%s) Command Class Object', $obj_name));
+        # check if config method exist
+        if (!method_exists($command, 'config')) {
+            return throw new CommandInputMethodNotFoundException(sprintf('Config Method Does Not Exist In (%s) Command Class Object', $obj_name));
         }
 
-        # check if output method exist
-        if (!method_exists($command, 'output')) {
-            return throw new CommandOutputMethodNotFoundException(sprintf('Input Method Does Not Exist In (%s) Command Class Object', $obj_name));
+        # check if execute method exist
+        if (!method_exists($command, 'exec')) {
+            return throw new CommandOutputMethodNotFoundException(sprintf('Exec Method Does Not Exist In (%s) Command Class Object', $obj_name));
         }
 
         return $command;

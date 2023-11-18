@@ -4,17 +4,22 @@ declare(strict_types=1);
 
 namespace FastVolt\Utils\Console\TestCommands;
 
-use FastVolt\Utils\Console\TestCommands\FastCommand;
+use FastVolt\Utils\Console\FastCommand;
+use FastVolt\Utils\Console\Traits\FastCommandTrait;
 
 class DefaultCommand extends FastCommand
 {
-    public function input()
+    use FastCommandTrait;
+
+    public function config()
     {
-        $this->command->addArgument('make:install', InputOption::VALUE_OPTIONAL);
+        $this->setName('install');
+        $this->setDescription('Install Fastvolt Application');
+        $this->addArgument('version', $this->inputArgs::VALUE_OPTIONAL, 'Application Version Number');
     }
 
 
-    public function output()
+    public function exec()
     {
         $greetings = $this->input->getArgument('make:install');
         
